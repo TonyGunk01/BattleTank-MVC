@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class TankModel
 {
@@ -6,20 +6,21 @@ public class TankModel
 
     public float movementSpeed;
     public float rotationSpeed;
-
     public TankTypes tankType;
-    public Material tankColor;
+    public Material color;
+    public ShellScript shellPrefab;
 
-    public TankModel(float movement_speed, float rotation_speed, TankTypes tank_type, Material tank_color)
+    public TankModel(float _movement, float _rotation, TankTypes tank, Material _color, ShellScript _shell)
     {
-        movementSpeed = movement_speed;
-        rotationSpeed = rotation_speed;
-        tankType = tank_type;
-        tankColor = tank_color;
+        movementSpeed = _movement;
+        rotationSpeed = _rotation;
+        tankType = tank;
+        color = _color;
+        shellPrefab = _shell;
     }
 
-    public void setTankController(TankController tank_controller)
+    public void SetTankController(TankController _tankController)
     {
-        tankController = tank_controller;
+        tankController = _tankController;
     }
 }

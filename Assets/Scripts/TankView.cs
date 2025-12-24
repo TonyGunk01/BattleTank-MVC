@@ -1,55 +1,79 @@
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class TankView : MonoBehaviour
 {
+
     private TankController tankController;
+    private float movementInput;
+    private float rotationInput;
 
-    private float movement;
-    private float rotation;
-
+    public Transform firePoint;
     public Rigidbody rb;
-
     public MeshRenderer[] childs;
 
+    public AudioClip driving;
+    public AudioClip idle;
+    public AudioSource source;
+
+    // Start is called before the first frame update
     void Start()
     {
-        GameObject cam =  GameObject.Find("Main Camera");
-        cam.transform.SetParent(transform);
-        cam.transform.position = new Vector3(0f, 3f, -4f);
+        source = GetComponent<AudioSource>();
     }
 
+    // Update is called once per frame
     void Update()
     {
-        Movement();
+        GetInput();
 
-        if (movement != 0)
-            tankController.Move(movement, tankController.getTankModel().movementSpeed);
+        if (movementInput != 0)
+            tankController.Move(movementInput);
 
-        if (rotation != 0)
-            tankController.Rotate(rotation, tankController.getTankModel().rotationSpeed);
+        if (rotationInput != 0)
+            tankController.Rotate(rotationInput);
+        PlayMovementAudio();
+        CheckFiring();
     }
 
-    private void Movement()
-    {
-        movement = Input.GetAxis("Vertical");
-        rotation = Input.GetAxis("Horizontal");
+	private void PlayMovementAudio()
+	{
+        if (rb.linearVelocity != Vector3.zero && source.clip != driving)
+        {
+            source.clip = driving;
+            source.Play();
+        }
+        else if(rb.linearVelocity == Vector3.zero && source.clip != idle)
+		{
+            source.clip = idle;
+            source.Play();
+        }
     }
 
-    public void setTankController(TankController tank_controller)
+	private void CheckFiring()
+	{
+        if (Input.GetMouseButtonDown(0))
+            tankController.Fire();
+	}
+
+	private void GetInput()
     {
-        tankController = tank_controller;
+        movementInput = Input.GetAxis("Vertical");
+        rotationInput = Input.GetAxis("Horizontal");
     }
 
-    public Rigidbody getRigidbody()
-    {
-        return rb;
-    }
+    public void SetTankController(TankController _tankController) => tankController = _tankController;
 
-    public void ChangeColor(Material tankColor)
+    public Rigidbody GetRigidbody() => rb;
+
+    public void ChangeColor(Material color)
     {
-        for(int i = 0; i < childs.Length; i++) 
-            childs[i].material = tankColor;
+        for (int i = 0; i < childs.Length; i++)
+        {
+            childs[i].material = color;
+        }
     }
 }

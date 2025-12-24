@@ -8,21 +8,21 @@ public class TankSelection : MonoBehaviour
     public void BlueTankSelected()
     {
         Debug.Log("Blue Tank Selected!");
-        tankSpawner.createTank(TankTypes.BlueTank);
+        tankSpawner.CreateTank(TankTypes.BlueTank);
         this.gameObject.SetActive(false);
     }
 
     public void GreenTankSelected()
     {
         Debug.Log("Green Tank Selected!");
-        tankSpawner.createTank(TankTypes.GreenTank);
+        tankSpawner.CreateTank(TankTypes.GreenTank);
         this.gameObject.SetActive(false);
     }
 
     public void RedTankSelected()
     {
         Debug.Log("Red Tank Selected!");
-        tankSpawner.createTank(TankTypes.RedTank);
+        tankSpawner.CreateTank(TankTypes.RedTank);
         this.gameObject.SetActive(false);
     }
 }

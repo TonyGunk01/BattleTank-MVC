@@ -1,4 +1,6 @@
+﻿using System;
 using UnityEngine;
+using Cinemachine;
 
 public class TankController
 {
@@ -7,33 +9,42 @@ public class TankController
 
     private Rigidbody rb;
 
-    public TankController(TankModel tank_model, TankView tank_view)
+    private CameraController virtualCam;
+
+    public TankController(TankModel _tankModel, TankView _tankView, CameraController cam)
     {
-        tankModel = tank_model;
-        tankView = GameObject.Instantiate<TankView>(tank_view);
+        tankModel = _tankModel;
+        tankView = GameObject.Instantiate<TankView>(_tankView);
+        rb = tankView.GetRigidbody();
+        virtualCam = cam;
 
-        rb = tankView.getRigidbody();
+        tankModel.SetTankController(this);
+        tankView.SetTankController(this);
 
-        tankModel.setTankController(this);
-        tankView.setTankController(this);
-
-        tankView.ChangeColor(tankModel.tankColor);
+        tankView.ChangeColor(tankModel.color);
+        virtualCam.SetPlayer(tankView.transform);
     }
 
-    public void Move(float movement, float movementSpeed)
+    public void Move(float movement)
     {
-        rb.velocity = tankView.transform.forward * movement * movementSpeed;
+        rb.linearVelocity = tankView.transform.forward * movement * tankModel.movementSpeed;
     }
-
-    public void Rotate(float rotate, float rotateSpeed)
+    public void Rotate(float rotate)
     {
-        Vector3 vector = new Vector3(0f, rotate * rotateSpeed, 0f);
-        Quaternion deltaRotation = Quaternion.Euler(vector * Time.fixedDeltaTime);
+        Vector3 vector = new Vector3(0f, rotate * tankModel.rotationSpeed, 0f);
+        Quaternion deltaRotation = Quaternion.Euler(vector * Time.deltaTime);
         rb.MoveRotation(rb.rotation * deltaRotation);
     }
 
-    public TankModel getTankModel()
+    public TankModel GetTankModel()
     {
         return tankModel;
     }
+
+	internal void Fire()
+	{
+        ShellScript newShell = GameObject.Instantiate<ShellScript>(tankModel.shellPrefab);
+        newShell.SetShellProperties(tankView.firePoint,virtualCam);
+        virtualCam.CameraShake();
+	}
 }
