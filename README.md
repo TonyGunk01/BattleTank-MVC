@@ -12,4 +12,4 @@ Using MVC has benefits such as:
 
 I have created 3 tanks which can be selected: red, green, blue. Each has varying fire rates and speeds which allows for customized gameplay based on user preference. The bullets use a particle system and trails for added effects.
 
-Video demo:
+[Click here for video demo:](https://youtu.be/QMbFjPWUat0)
